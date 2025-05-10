@@ -1,0 +1,82 @@
+<div class="revenue-container">
+  <div *ngIf="!revenueData" class="loading">
+    <div class="spinner"></div>
+    <p>Analyse des revenus en cours...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div class="revenue-card" *ngIf="revenueData">
+    <div class="card-header">
+      <h2>Analyse des Revenus</h2>
+      <div class="card-subtitle">Performance et projections</div>
+      <div class="encouragement-message" [class]="getRevenueStatus()">
+        {{ getEncouragementMessage() }}
+      </div>
+    </div>
+
+    <div class="revenue-content">
+      <div class="revenue-period" [class.highlight]="revenueData.totalRevenueLast30Days > revenueData.totalRevenuePrevious30Days">
+        <div class="period-icon">📅</div>
+        <div class="period-value">{{ revenueData.totalRevenueLast30Days }} DT</div>
+        <div class="period-label">30 derniers jours</div>
+      </div>
+
+      <div class="revenue-period">
+        <div class="period-icon">⏮️</div>
+        <div class="period-value">{{ revenueData.totalRevenuePrevious30Days }} DT</div>
+        <div class="period-label">30 jours précédents</div>
+      </div>
+
+      <div class="revenue-period" [class.highlight]="revenueData.predictedRevenueNext30Days > revenueData.totalRevenueLast30Days">
+        <div class="period-icon">🔮</div>
+        <div class="period-value">{{ revenueData.predictedRevenueNext30Days }} DT</div>
+        <div class="period-label">30 prochains jours</div>
+      </div>
+    </div>
+
+    <div class="revenue-chart">
+      <h3>Évolution des revenus</h3>
+      <div class="chart-container">
+        <div class="bar-row">
+          <label>Actuel</label>
+          <div class="bar" [style.width.%]="getWidth(revenueData.totalRevenueLast30Days)"></div>
+          <span>{{ revenueData.totalRevenueLast30Days }} DT</span>
+        </div>
+
+        <div class="bar-row">
+          <label>Précédent</label>
+          <div class="bar previous" [style.width.%]="getWidth(revenueData.totalRevenuePrevious30Days)"></div>
+          <span>{{ revenueData.totalRevenuePrevious30Days }} DT</span>
+        </div>
+
+        <div class="bar-row">
+          <label>Prédiction</label>
+          <div class="bar predicted" [style.width.%]="getWidth(revenueData.predictedRevenueNext30Days)"></div>
+          <span>{{ revenueData.predictedRevenueNext30Days }} DT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="revenue-stats">
+      <div class="stat-item" [class.celebrate]="revenueData.growthRate > 10">
+        <div class="stat-icon">📈</div>
+        <div class="stat-value">{{ revenueData.growthRate }}%</div>
+        <div class="stat-label">Croissance</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">{{ revenueData.averageDailyRevenue }} DT</div>
+        <div class="stat-label">Moyenne/jour</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">{{ getTrendEmoji(revenueData.tendance) }}</div>
+        <div class="stat-value">{{ revenueData.tendance }}</div>
+        <div class="stat-label">Tendance</div>
+      </div>
+    </div>
+  </div>
+</div>
+  

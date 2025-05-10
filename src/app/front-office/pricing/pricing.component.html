@@ -1,0 +1,152 @@
+
+    <div class="pricing-section">
+      <div class="container">
+        <div class="pricing-header text-center mb-5">
+          <h1 class="display-4">Choisissez votre abonnement</h1>
+          <p class="lead text-muted">Sélectionnez le plan qui correspond le mieux à vos besoins</p>
+          
+          <div class="pricing-toggle mt-4">
+            <div class="toggle-container">
+              <span class="toggle-label" [class.active]="!isYearlyPricing">Mensuel</span>
+              <label class="switch">
+                <input type="checkbox" (change)="togglePricing()" [checked]="isYearlyPricing">
+                <span class="slider round"></span>
+              </label>
+              <span class="toggle-label" [class.active]="isYearlyPricing">Annuel</span>
+              <span class="discount-badge" *ngIf="isYearlyPricing">-20%</span>
+            </div>
+          </div>
+        </div>
+      
+        <div class="row justify-content-center">
+          <div class="col-md-4 mb-4" *ngFor="let pack of filteredAbonnements">
+            <div class="pricing-card {{pack.type}}">
+              <div class="pricing-badge" *ngIf="pack.type === 'GOLD'">
+                <span class="badge bg-warning text-dark">
+                  <i class="bi bi-trophy me-1"></i>
+                  Populaire
+                </span>
+              </div>
+              
+              <div class="pricing-header">
+                <h3 class="pack-name">
+                  <i class="bi" [ngClass]="{
+                    'bi-award': pack.type === 'SILVER',
+                    'bi-trophy': pack.type === 'GOLD',
+                    'bi-gem': pack.type === 'PLATINUM'
+                  }"></i>
+                  {{pack.nom}}
+                </h3>
+                <div class="price">
+                  <span class="currency">DT</span>
+                  <span class="amount">{{getCurrentPrice(pack)}}</span>
+                  <span class="period">{{getPricePeriod()}}</span>
+                </div>
+                <div class="price-savings" *ngIf="isYearlyPricing">
+                  <small class="text-muted">Économisez jusqu'à 20%</small>
+                </div>
+              </div>
+              
+              <div class="pricing-features">
+                <ul class="feature-list">
+                  <li *ngFor="let avantage of pack.avantages">
+                    <i class="fas fa-check-circle text-success"></i>
+                    <span>{{avantage}}</span>
+                  </li>
+                  <li>
+                    <i class="fas fa-clock text-primary"></i>
+                    <span>Durée : {{pack.duree}} jours</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="pricing-footer">
+                <button 
+                  class="btn btn-subscribe" 
+                  [ngClass]="{'btn-primary': pack.type !== 'GOLD', 'btn-warning': pack.type === 'GOLD'}"
+                  (click)="ouvrirModalPaiement(pack)"
+                  >
+                  <i class="fas fa-shopping-cart me-2"></i>
+                  {{ currentUser ? "S'abonner" : "Connectez-vous pour vous abonner" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de paiement -->
+      <div class="payment-modal" *ngIf="showPaymentModal && selectedPack">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fas fa-credit-card me-2"></i>
+              Confirmation de paiement
+            </h4>
+            <button type="button" class="btn-close" (click)="fermerModalPaiement()"></button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="payment-details">
+              <div class="pack-info mb-4">
+                <h5 class="section-title">
+                  <i class="fas fa-box me-2"></i>
+                  Détails de l'abonnement
+                </h5>
+                <div class="info-item">
+                  <span class="label">Pack :</span>
+                  <span class="value">{{selectedPack.nom}}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Prix :</span>
+                  <span class="value">{{getCurrentPrice(selectedPack)}}€ {{getPricePeriod()}}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Durée :</span>
+                  <span class="value">{{selectedPack.duree}} jours</span>
+                </div>
+              </div>
+              
+              <div class="user-details" *ngIf="currentUser">
+                <h5 class="section-title">
+                  <i class="fas fa-user me-2"></i>
+                  Vos informations
+                </h5>
+                <div class="info-item">
+                  <span class="label">Nom :</span>
+                  <span class="value">{{currentUser.nom}}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Prénom :</span>
+                  <span class="value">{{currentUser.prenom}}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Email :</span>
+                  <span class="value">{{currentUser.email}}</span>
+                </div>
+              </div>
+
+              <div class="stripe-payment-form mt-4">
+                <h5 class="section-title">
+                  <i class="fas fa-credit-card me-2"></i>
+                  Informations de paiement
+                </h5>
+                <div id="card-element" class="form-control mb-3"></div>
+                <div id="card-errors" class="text-danger mb-3"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="fermerModalPaiement()">
+              <i class="fas fa-times me-2"></i>
+              Annuler
+            </button>
+            <button type="button" class="btn btn-primary" (click)="effectuerPaiement()">
+              <i class="fas fa-check me-2"></i>
+              Confirmer le paiement
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,142 @@
+<nav class="page-breadcrumb">
+  <ol class="breadcrumb bg-white">
+    <li class="breadcrumb-item"><a routerLink=".">Compte</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Profil</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <hr />
+  <div class="row">
+    <h3 class="fw-bolder mb-3">Informations personnelles</h3>
+
+    <form class="forms-sample" (submit)="uploadAndSave()" [formGroup]="validationForm">
+      <input hidden type="text" formControlName="id" />
+
+      <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="lastName"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Prénom</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="firstName"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Téléphone</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="phone"
+          pattern="[0-9]{8}"
+          required
+          placeholder="veuillez entrer un numéro de téléphone valide"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          required
+        />
+      </div>
+
+      <div *ngIf="emailExistsError" class="text-danger mb-3">
+        {{ emailExistsError }}
+      </div>
+
+      <!-- Upload image -->
+      <div class="mb-3">
+        <label class="form-label">Photo de profil</label>
+        <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*" />
+      </div>
+
+      <!-- Aperçu de l'image sélectionnée -->
+      <div *ngIf="imagePreview" class="mb-3">
+        <label class="form-label">Aperçu :</label><br />
+        <img [src]="imagePreview" class="profile-picture" />
+      </div>
+
+      <!-- Affichage de la photo actuelle -->
+    
+
+      <!-- Image par défaut si pas de photo -->
+      <div *ngIf="!imagePreview && !currentUser?.photo" class="mb-3">
+        <label class="form-label">Photo actuelle :</label><br />
+        <img
+          src="assets/images/user.jpg"
+          alt="Profil par défaut"
+          class="profile-picture"
+        />
+      </div>
+
+      <div>
+        <button type="submit" class="btn btn-primary mb-3">Mettre à jour</button>
+      </div>
+    </form>
+
+    <!-- Alertes -->
+    <div *ngIf="ErrorMessage" class="alert alert-danger text-center alert-dismissible fade show">
+      {{ ErrorMessage }}
+      <button type="button" class="btn-close" (click)="hideErrorMessage()"></button>
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success text-center alert-dismissible fade show">
+      {{ successMessage }}
+      <button type="button" class="btn-close" (click)="hideSuccessMessage()"></button>
+    </div>
+
+    <!-- Formulaire de changement de mot de passe -->
+    <form class="forms-sample" (submit)="changePassword()" [formGroup]="passwordForm">
+      <div class="mb-3">
+        <label class="form-label">Mot de passe actuel</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="currentPassword"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Nouveau mot de passe</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="newPassword"
+          pattern="^.{6,20}$"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Confirmer le mot de passe</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="confirmPassword"
+          pattern="^.{6,20}$"
+          required
+        />
+      </div>
+
+      <div>
+        <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
+      </div>
+    </form>
+  </div>
+</div>

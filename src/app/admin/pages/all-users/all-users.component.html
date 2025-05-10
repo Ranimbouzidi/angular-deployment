@@ -1,0 +1,185 @@
+<nav class="page-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="../dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      utilisateurs ({{ filteredUsersCount }})
+    </li>
+  </ol>
+</nav>
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          utilisateurs<span class="float-end"><button (click)="AddUser(verticalCenteredModal)"
+              class="btn btn-primary rounded-pill btn-sm">
+              Ajouter utilisateur +
+            </button></span>
+        </div>
+        <div class="mb-4">
+          <input
+  type="text"
+  placeholder="Filter users..."
+  [(ngModel)]="filterText"
+  (ngModelChange)="filterUsers()"
+  class="form-control mt-4"
+/>
+
+        </div>
+
+        <div class="table-responsive mt-4">
+          <table class="table-hover table border-dark" style="width: 100%">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Role</th>
+                <th>email</th>
+
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of filteredUsers">
+                <td>
+                  <div *ngIf="user.photo; else defaultAvatar">
+                    <img 
+                      [src]="'http://localhost:8081/api/uploads/' + user.photo" 
+                      alt="Photo de profil"
+                      class="user-avatar"
+                    />
+                  </div>
+                  <ng-template #defaultAvatar>
+                    <div class="default-avatar">
+                      {{ getInitials(user.nom, user.prenom) }}
+                    </div>
+                  </ng-template>
+                </td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger rounded-3 btn-sm"
+                    style="margin-right: 5px"
+                    (click)="deleteUser(user.id)"
+                  >
+                    <i class="mdi mdi-delete"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-warning rounded-3 btn-sm"
+                    style="margin-right: 5px"
+                    (click)="openEditModal(user, editModal)"
+                  >
+                    <i class="mdi mdi-pencil"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-info rounded-3 btn-sm"
+                    style="margin-right: 5px"
+                    (click)="openChat(user)"
+                  >
+                    <i class="mdi mdi-message-text"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #verticalCenteredModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Ajouter utilisateur</h5>
+    <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <form class="forms-sample" (submit)="onRegister($event)" [formGroup]="validationForm">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Nom</label>
+            <input type="text" class="form-control" id="lastName" formControlName="lastName" [ngClass]="{
+                'is-invalid': isFormSubmitted && form.lastName.errors
+              }" placeholder="Nom" required />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="mb-3">
+            <label for="firstName" class="form-label">Prénom</label>
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" [ngClass]="{
+                'is-invalid': isFormSubmitted && form.firstName.errors
+              }" placeholder="Prénom" required />
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" formControlName="email"
+          [ngClass]="{ 'is-invalid': isFormSubmitted && form.email.errors }" placeholder="Email" required />
+      </div>
+      <div *ngIf="emailExistsError" class="text-danger mb-3">
+        {{ emailExistsError }}
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" pattern="^.{6,20}$" formControlName="password"
+          [ngClass]="{ 'is-invalid': isFormSubmitted && form.password.errors }" name="password" placeholder="Password"
+          placeholder="entre 6 et 20 Caractères" required />
+      </div>
+      <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select type="" class="form-select" id="role" name="role" formControlName="role"
+          [ngClass]="{ 'is-invalid': isFormSubmitted && form.role.errors }">
+          <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+        </select>
+      </div>
+      <div class="text-success mb-2" *ngIf="successMessage">
+        <p>{{ successMessage }}</p>
+        <p>Redirecting to login page in {{ countdown }} secondes...</p>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary" [disabled]="!validationForm.valid">
+          Ajouter utilisateur
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<ng-template #editModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modifier Utilisateur</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editForm" (ngSubmit)="onEditSubmit(modal)">
+      <div class="mb-3">
+        <label>Nom</label>
+        <input type="text" class="form-control" formControlName="nom" />
+      </div>
+      <div class="mb-3">
+        <label>Prénom</label>
+        <input type="text" class="form-control" formControlName="prenom" />
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" class="form-control" formControlName="email" />
+      </div>
+      <div class="mb-3">
+        <label>Rôle</label>
+        <select class="form-control" formControlName="role">
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+  </div>
+</ng-template>

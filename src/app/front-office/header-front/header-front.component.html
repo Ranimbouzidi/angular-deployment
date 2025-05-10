@@ -1,0 +1,146 @@
+<!-- Pre-Loader -->
+<div id="loader"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+
+<!-- Header Area -->
+<div class="header-area">
+  <div id="header-sticky">
+    <div class="navigation">
+      <div class="container-fluid">
+        <div class="header-inner-box">
+          <!-- Logo -->
+          <div class="logo">
+             <!--- Logo -->
+    <a routerLink="/" class="sidebar-brand nobleui-logo">
+      Law<span style="font-size: 18px;"> Connect</span>
+    </a>
+
+          </div>
+
+          <!-- Main Menu -->
+          <div class="main-menu d-none d-lg-block">
+            <ul>
+              <li>
+                <a class="navlink" routerLink="/">
+                  <i class="bi bi-house-door me-2"></i>Home
+                </a>
+                <ul class="sub-menu">
+                  <li><a routerLink="/lawFirm"><i class="bi bi-building me-2"></i>Law Firm</a></li>
+                  <li><a routerLink="/Formateur"><i class="bi bi-person-workspace me-2"></i>Formateur</a></li>
+                  <li><a routerLink="/Lawyer"><i class="bi bi-person-badge me-2"></i>Lawyer</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a class="navlink" href="#">
+                  <i class="bi bi-file-earmark-text me-2"></i>Pages
+                </a>
+                <ul class="sub-menu">
+                  <li><a routerLink="/about"><i class="bi bi-info-circle me-2"></i>About Us</a></li>
+                  <li><a routerLink="/case"><i class="bi bi-folder me-2"></i>Case Studies</a></li>
+                  <li><a routerLink="/team"><i class="bi bi-people me-2"></i>Our Team</a></li>
+                  <li><a routerLink="/pricing"><i class="bi bi-tag me-2"></i>Pricing</a></li>
+                  <li><a routerLink="/faq"><i class="bi bi-question-circle me-2"></i>FAQs</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a class="navlink" routerLink="/services">
+                  <i class="bi bi-briefcase me-2"></i>Practice Areas
+                </a>
+                <ul class="sub-menu">
+                  <li><a routerLink="/services"><i class="bi bi-grid me-2"></i>All Areas</a></li>
+                  <li><a routerLink="/serviceDetail"><i class="bi bi-file-text me-2"></i>Single Area</a></li>
+                </ul>
+              </li>
+
+              <li>
+                <a class="navlink" routerLink="/blogs">
+                  <i class="bi bi-newspaper me-2"></i>Blog
+                </a>
+                <ul class="sub-menu">
+                  <li><a routerLink="/blogs"><i class="bi bi-journal-text me-2"></i>Blogs</a></li>
+                  <li><a routerLink="/blogdetail"><i class="bi bi-file-earmark-text me-2"></i>Blog Details</a></li>
+                </ul>
+              </li>
+
+              <li><a class="navlink" routerLink="/contact"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Header Right -->
+          <div class="header-right d-none d-lg-block">
+            <ng-container *ngIf="currentUser; else guestButtons">
+              <div class="nav-profile">
+                <img
+                  class="profile-image"
+                  [src]="'http://localhost:8081/api/uploads/' + currentUser.photo"
+                  alt="profile"
+                />
+                <div class="profile-dropdown">
+                  <div class="profile-header">
+                    <img [src]="'http://localhost:8081/api/uploads/' + currentUser.photo" />
+                    <h4 class="profile-name">{{ currentUser.nom }} {{ currentUser.prenom }}</h4>
+                    <p class="profile-email">{{ currentUser.email }}</p>
+                  </div>
+                  <ul class="profile-menu">
+                    <li>
+                      <a routerLink="/mon-compte">
+                        <i class="bi bi-person"></i>
+                        <span>Profil</span>
+                      </a>
+                    </li>
+                  <li *ngIf="currentUser.role !== 'ADMIN'">
+                      <a routerLink="/mes-abonnements">
+                        <i class="bi bi-credit-card"></i>
+                        <span>Mes Abonnements</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/" (click)="onLogout()">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Déconnexion</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #guestButtons>
+              <a class="btn btn-primary" routerLink="/connexion">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Connexion
+              </a>
+            </ng-template>
+          </div>
+
+          <!-- Mobile Menu Toggle -->
+          <div class="mobile-menu d-lg-none">
+            <button class="navbar-toggler" type="button" (click)="isMenuOpen = !isMenuOpen">
+              <i class="bi bi-list" *ngIf="!isMenuOpen"></i>
+              <i class="bi bi-x-lg" *ngIf="isMenuOpen"></i>
+            </button>
+            <div [class.active]="isMenuOpen" class="mobile-nav">
+              <ul>
+                <li><a routerLink="/"><i class="bi bi-house-door me-2"></i>Home</a></li>
+                <li><a routerLink="/about"><i class="bi bi-info-circle me-2"></i>About</a></li>
+                <li><a routerLink="/services"><i class="bi bi-briefcase me-2"></i>Services</a></li>
+                <li><a routerLink="/blogs"><i class="bi bi-newspaper me-2"></i>Blog</a></li>
+                <li><a routerLink="/contact"><i class="bi bi-envelope me-2"></i>Contact</a></li>
+                <li *ngIf="currentUser">
+                  <a routerLink="/mon-compte"><i class="bi bi-person me-2"></i>Mon Compte</a>
+                  <a href="#" (click)="onLogout()"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a>
+                </li>
+                <li *ngIf="!currentUser">
+                  <a routerLink="/connexion"><i class="bi bi-box-arrow-in-right me-2"></i>Connexion</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

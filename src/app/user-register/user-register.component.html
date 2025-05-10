@@ -1,0 +1,80 @@
+<div class="row w-100 mx-0 mt-7 auth-page">
+   <div class="col-md-8 col-xl-6 mx-auto">
+      <div class="card">
+         <div class="row">
+            <div class="col-md-4 pe-md-0">
+               <div class="auth-side-wrapper" >
+                  <div class="auth-side-wrapper" [ngStyle]="{ 'background-image': 'url(../assets/images/login.jpg)' }">
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-8 ps-md-0">
+               <div class="auth-form-wrapper px-4 py-5">
+                  <a routerLink="/" class="nobleui-logo d-block mb-2">Law<span>Connect</span></a>
+                  <h5 class="text-muted fw-normal mb-4">Créer un compte</h5>
+                  <form class="forms-sample" (submit)="onRegister($event)" [formGroup]="validationForm">
+                  <div class="row">
+                     <div class="col-lg-6">
+                        <div class="mb-3">
+                           <label for="exampleInputUsername1" class="form-label">Nom</label>
+                           <input type="text" class="form-control" id="nom" formControlName="nom" 
+                           [ngClass]="{'is-invalid': isFormSubmitted && form.nom.errors}" [(ngModel)]="user.nom" placeholder="Nom" required>
+                        </div>
+                     </div>
+                     <div class="col-lg-6">
+                        <div class="mb-3">
+                           <label for="exampleInputUsername1" class="form-label">Prénom</label>
+                           <input type="text" class="form-control" id="prenom" formControlName="prenom" 
+                           [ngClass]="{'is-invalid': isFormSubmitted && form.prenom.errors}" [(ngModel)]="user.prenom" placeholder="Prénom" required>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="mb-3">
+                     <label for="exampleInputUsername1" class="form-label">Email</label>
+                     <input type="email" class="form-control" id="email" formControlName="email" 
+                     [ngClass]="{'is-invalid': isFormSubmitted && form.email.errors}" [(ngModel)]="user.email" placeholder="Email" required>
+                  </div>
+                  <div *ngIf="emailExistsError" class="text-danger mb-3">{{ emailExistsError }}</div>
+                  <div class="mb-3">
+                     <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
+                     <input type="password" class="form-control" id="password" pattern="^.{6,20}$"  formControlName="motDePasse"   
+                        [ngClass]="{'is-invalid': isFormSubmitted && form.motDePasse.errors}" name="password"  placeholder="Mot de passe" placeholder="entre 6 et 20 Caractères" required>
+                  </div>
+                   
+                   <div class="row">
+                  <div class="col-lg-6">
+                  <div class="mb-3">
+                   <label  class="form-label">Téléphone</label>
+                   <input type="tel" class="form-control" id="password" pattern="[0-9]{8}" formControlName="numeroDeTelephone"   
+                      [ngClass]="{'is-invalid': isFormSubmitted && form.numeroDeTelephone.errors}" name="numeroDeTelephone" [(ngModel)]="user.numeroDeTelephone"   placeholder="téléphone"  required>
+                </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="mb-3">
+                     <label for="exampleInputPassword1" class="form-label">Role</label>
+                     <select type="" class="form-select" name="role" [(ngModel)]="user.role" formControlName="role"
+                     [ngClass]="{'is-invalid': isFormSubmitted && form.role.errors}"  >
+                     <option value="ADMIN">ADMIN</option>
+                     <option value="CANDIDATE">CANDIDATE</option>
+                 
+                     </select>
+                  </div>
+                </div>
+               </div>
+                
+                  <div class="text-success mb-2" *ngIf="successMessage" >
+                     <p>{{ successMessage }}</p>
+                     <p>Redirecting to login page in {{ countdown }} secondes...</p>
+                  </div>
+                  <div>
+                     <button type="submit" class="btn btn-primary" [disabled]=" isFormValid">S'inscrire</button>
+                  </div>
+                  <a href="./connexion" class="d-block mt-3 text-muted">Déjà un utilisateur? Se connecter</a>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+

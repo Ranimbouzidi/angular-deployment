@@ -1,0 +1,394 @@
+/* === Loader === */
+#loader {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 9999;
+  display: none; /* mettre à block si tu veux le voir */
+}
+
+/* === Mouse Cursor === */
+.mouseCursor {
+  pointer-events: none;/* === Loader === */
+  #loader {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+   
+    z-index: 9999;
+    display: none; /* mettre à block si tu veux le voir */
+  }
+  
+  /* === Mouse Cursor === */
+  .mouseCursor {
+    pointer-events: none;
+    position: fixed;
+    z-index: 10000;
+  }
+  .cursor-outer, .cursor-inner {
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-outer {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #000;
+  }
+  .cursor-inner {
+    width: 8px;
+    height: 8px;
+    background-color: #000;
+  }
+  
+  /* === Header === */
+  .header-area {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 999;
+  }
+  .header-inner-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+  }
+  .logo img {
+    height: 45px;
+  }
+  
+  /* === Main Menu === */
+  .main-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  .main-menu ul li {
+    position: relative;
+  }
+  .main-menu ul li a {
+    color: #333;
+    font-weight: 500;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  .main-menu ul li:hover > a {
+    color: #0d6efd;
+  }
+  .main-menu .sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    min-width: 220px;
+    border-radius: 6px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1000;
+  }
+  .main-menu ul li:hover .sub-menu {
+    display: block;
+  }
+  .main-menu .sub-menu li a {
+    padding: 10px 20px;
+    color: #555;
+  }
+  .main-menu .sub-menu li a:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* === Profile Dropdown === */
+  .nav-profile {
+    position: relative;
+    cursor: pointer;
+  }
+  .profile-image {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0d6efd;
+  }
+  .profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 55px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    display: none;
+    width: 250px;
+    z-index: 999;
+  }
+  .nav-profile:hover .profile-dropdown {
+    display: block;
+  }
+  .profile-header {
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  .profile-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  .profile-name {
+    font-weight: bold;
+    margin: 10px 0 5px;
+  }
+  .profile-email {
+    font-size: 13px;
+    color: #777;
+  }
+  .profile-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .profile-menu li {
+    border-top: 1px solid #f1f1f1;
+  }
+  .profile-menu li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #333;
+    transition: 0.3s;
+  }
+  .profile-menu li a:hover {
+    background: #f1f1f1;
+    color: #0d6efd;
+  }
+  .profile-menu i {
+    margin-right: 10px;
+  }
+  
+  /* === Mobile Menu === */
+  .mobile-menu {
+    display: flex;
+    align-items: center;
+  }
+  .mobile-menu .navbar-toggler {
+    border: none;
+    background: transparent;
+    font-size: 28px;
+  }
+  .mobile-nav {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background: #fff;
+    width: 280px;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 20px;
+    display: none;
+  }
+  .mobile-nav.active {
+    display: block;
+  }
+  .mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .mobile-nav ul li a {
+    display: block;
+    padding: 12px 0;
+    color: #333;
+    font-weight: 500;
+    border-bottom: 1px solid #eee;
+  }
+  .mobile-nav ul li a:hover {
+    color: #0d6efd;
+  }
+  
+  position: fixed;
+  z-index: 10000;
+}
+.cursor-outer, .cursor-inner {
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.cursor-outer {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000;
+}
+.cursor-inner {
+  width: 8px;
+  height: 8px;
+  background-color: #000;
+}
+
+/* === Header === */
+.header-area {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  position: relative;
+  z-index: 999;
+}
+.header-inner-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+}
+.logo img {
+  height: 45px;
+}
+
+/* === Main Menu === */
+.main-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+.main-menu ul li {
+  position: relative;
+}
+.main-menu ul li a {
+  color: #333;
+  font-weight: 500;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+.main-menu ul li:hover > a {
+  color: #0d6efd;
+}
+.main-menu .sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  min-width: 220px;
+  border-radius: 6px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 1000;
+}
+.main-menu ul li:hover .sub-menu {
+  display: block;
+}
+.main-menu .sub-menu li a {
+  padding: 10px 20px;
+  color: #555;
+}
+.main-menu .sub-menu li a:hover {
+  background-color: #f8f9fa;
+}
+
+/* === Profile Dropdown === */
+.nav-profile {
+  position: relative;
+  cursor: pointer;
+}
+.profile-image {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #0d6efd;
+}
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+  display: none;
+  width: 250px;
+  z-index: 999;
+}
+.nav-profile:hover .profile-dropdown {
+  display: block;
+}
+.profile-header {
+  text-align: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+.profile-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.profile-name {
+  font-weight: bold;
+  margin: 10px 0 5px;
+}
+.profile-email {
+  font-size: 13px;
+  color: #777;
+}
+.profile-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.profile-menu li {
+  border-top: 1px solid #f1f1f1;
+}
+.profile-menu li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #333;
+  transition: 0.3s;
+}
+.profile-menu li a:hover {
+  background: #f1f1f1;
+  color: #0d6efd;
+}
+.profile-menu i {
+  margin-right: 10px;
+}
+
+/* === Mobile Menu === */
+.mobile-menu {
+  display: flex;
+  align-items: center;
+}
+.mobile-menu .navbar-toggler {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+}
+.mobile-nav {
+  position: absolute;
+  top: 70px;
+  right: 0;
+  background: #fff;
+  width: 280px;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  padding: 20px;
+  display: none;
+}
+.mobile-nav.active {
+  display: block;
+}
+.mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mobile-nav ul li a {
+  display: block;
+  padding: 12px 0;
+  color: #333;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+}
+.mobile-nav ul li a:hover {
+  color: #0d6efd;
+}

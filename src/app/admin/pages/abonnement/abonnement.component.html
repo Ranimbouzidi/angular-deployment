@@ -1,0 +1,155 @@
+<nav class="page-breadcrumb mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="../dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Abonnements ({{ filteredAbonnementsCount }})
+    </li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="card-title mb-0 fw-bold">Liste des Abonnements</h5>
+          <button (click)="addAbonnement()" class="btn btn-primary btn-sm rounded-pill shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Ajouter
+          </button>
+        </div>
+
+        <input type="text" placeholder="🔍 Filtrer les abonnements..." [(ngModel)]="filterText"
+               (input)="filterAbonnements()" class="form-control mb-4 shadow-sm" />
+
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+          <table class="table table-hover align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Prix Mensuel</th>
+                <th>Prix Annuel</th>
+                <th>Type</th>
+                <th>Durée</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of filteredAbonnements">
+                <td>{{ a.nom }}</td>
+                <td>{{ a.description }}</td>
+                <td>{{ a.prixMensuel }} DT</td>
+                <td>{{ (+a.prixMensuel * 12 * 0.8) | number:'1.2-2' }} DT</td>
+                <td>
+                  <span class="badge" [ngClass]="{
+                    'bg-secondary': a.type === 'SILVER',
+                    'bg-warning text-dark': a.type === 'GOLD',
+                    'bg-primary': a.type === 'PLATINUM'
+                  }">
+                    <i class="bi" [ngClass]="{
+                      'bi-award': a.type === 'SILVER',
+                      'bi-trophy': a.type === 'GOLD',
+                      'bi-gem': a.type === 'PLATINUM'
+                    }"></i>
+                    {{ a.type }}
+                  </span>
+                </td>
+                <td>{{ a.duree }} j</td>
+                <td>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill"
+                            (click)="editPack(a)" title="Modifier">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm rounded-pill"
+                            (click)="deletePack(a.id)" title="Supprimer">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredAbonnements.length === 0">
+                <td colspan="6" class="text-muted py-4">Aucun abonnement trouvé.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addPackModal" tabindex="-1" aria-labelledby="addPackLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form [formGroup]="packForm" (ngSubmit)="editMode ? submitEditAbonnement() : submitAddAbonnement()"
+          class="modal-content shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="addPackLabel">
+          <i class="bi bi-box-seam me-2"></i>
+          {{ editMode ? 'Modifier un Abonnement' : 'Ajouter un Abonnement' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Fermer"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <input type="hidden" formControlName="id" />
+        
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" formControlName="nom" id="nomInput" placeholder="Nom">
+          <label for="nomInput">Nom</label>
+          <div class="invalid-feedback" *ngIf="packForm.get('nom')?.invalid && packForm.get('nom')?.touched">
+            Le nom est requis
+          </div>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" formControlName="description" id="descInput" placeholder="Description">
+          <label for="descInput">Description</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" formControlName="prixMensuel" id="prixMensuel" placeholder="Prix Mensuel">
+          <label for="prixMensuel">Prix Mensuel (DT)</label>
+          <div class="invalid-feedback" *ngIf="packForm.get('prixMensuel')?.invalid && packForm.get('prixMensuel')?.touched">
+            Le prix mensuel est requis et doit être un nombre valide
+          </div>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" formControlName="prixAnnuel" id="prixAnnuel" placeholder="Prix Annuel" readonly>
+          <label for="prixAnnuel">Prix Annuel (DT) <small class="text-muted">(Calculé automatiquement avec 20% de réduction)</small></label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="number" class="form-control" formControlName="duree" id="dureeInput" placeholder="Durée">
+          <label for="dureeInput">Durée (en jours)</label>
+          <div class="invalid-feedback" *ngIf="packForm.get('duree')?.invalid && packForm.get('duree')?.touched">
+            La durée est requise
+          </div>
+        </div>
+
+        <div class="form-floating">
+          <select class="form-select" formControlName="type" id="typeSelect">
+            <option value="SILVER">SILVER</option>
+            <option value="GOLD">GOLD</option>
+            <option value="PLATINUM">PLATINUM</option>
+          </select>
+          <label for="typeSelect">Type</label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary me-2" (click)="closeModal()">
+          <i class="bi bi-x-circle me-1"></i>
+          Annuler
+        </button>
+        <button type="submit" class="btn btn-success" [disabled]="packForm.invalid">
+          <i class="bi bi-check-circle me-1"></i>
+          {{ editMode ? 'Mettre à jour' : 'Ajouter' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+.table thead th {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  
+  .badge {
+    font-size: 0.85rem;
+    padding: 0.4em 0.8em;
+    border-radius: 0.5rem;
+  }
+  
+  .modal .form-floating label {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+  .badge {
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }

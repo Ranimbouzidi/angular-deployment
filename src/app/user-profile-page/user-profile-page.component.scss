@@ -1,0 +1,35 @@
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #f0f2f5;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.profile-name {
+  margin-top: -1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.position-absolute {
+  z-index: 1;
+}
+
+.cover-image {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+

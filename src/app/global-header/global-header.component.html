@@ -1,0 +1,118 @@
+<div class="container">
+  <div
+    class="navbar navbar-expand-lg text-bm"
+    style="position: absolute; border: none; background-color: transparent; padding: 0 100px; width: 100%; left: 0px"
+  >
+    <!-- Logo -->
+    <a class="navbar-brand text-white m-5" routerLink="/">
+      <span class="sidebar-brand nobleui-logo text-white">Law Connect</span>
+    </a>
+
+    <!-- Burger Button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="isBasicExampleMenuCollapsed = !isBasicExampleMenuCollapsed"
+    >
+      &#9776;
+    </button>
+
+    <!-- Menu -->
+    <div [ngbCollapse]="isBasicExampleMenuCollapsed" class="collapse navbar-collapse">
+      <!-- LEFT NAV -->
+      <ul class="navbar-nav me-auto text-white">
+        <li class="nav-item dropdown active">
+          <a class="nav-link dropdown-toggle navlink" href="#" data-bs-toggle="dropdown">Home</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/lawFirm">Law Firm</a></li>
+            <li><a class="dropdown-item" routerLink="/Formateur">Formateur</a></li>
+            <li><a class="dropdown-item" routerLink="/Lawyer">Lawyer</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle navlink" href="#" data-bs-toggle="dropdown">Pages</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/about">About Us</a></li>
+            <li><a class="dropdown-item" routerLink="/case">Case Studies</a></li>
+            <li><a class="dropdown-item" href="#">Our Team</a></li>
+            <li><a class="dropdown-item" routerLink="/pricing">Pricing</a></li>
+            <li><a class="dropdown-item" href="#">FAQs</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle navlink" href="#" data-bs-toggle="dropdown">Practics Areas</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/services">Practics Areas</a></li>
+            <li><a class="dropdown-item" routerLink="/serviceDetail">Single Practice Area</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle navlink" href="#" data-bs-toggle="dropdown">Blog</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" routerLink="/blogs">Blogs</a></li>
+            <li><a class="dropdown-item" routerLink="/blogdetail">Blog Details</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link navlink" routerLink="/contact">Contact</a>
+        </li>
+      </ul>
+
+      <!-- RIGHT NAV -->
+      <div class="d-flex align-items-center">
+        <div
+          class="nav-item nav-profile"
+          *ngIf="currentUser"
+          ngbDropdown
+          style="padding: 0px; margin: 0px"
+        >
+          <img
+            type="button"
+            class="wd-30 ht-30 rounded-circle"
+            style="margin-right: 22px;"
+            ngbDropdownToggle
+            src="../assets/images/user.jpg"
+            alt="profile"
+          />
+          <div
+            ngbDropdownMenu
+            class="px-0 border-2 border-dark"
+            aria-labelledby="profileDropdown"
+            style="left: -60px"
+          >
+            <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
+              <div class="mb-3">
+                <img class="wd-80 ht-80 rounded-circle" src="../assets/images/user.jpg" alt="" />
+              </div>
+              <div class="text-center">
+                <p class="tx-16 fw-bolder">
+                  {{ currentUser.nom }} {{ currentUser.prenom }}
+                </p>
+                <p class="tx-12 text-muted">{{ currentUser.email }}</p>
+              </div>
+            </div>
+            <ul class="list-unstyled p-1">
+              <li class="dropdown-item py-2">
+                <a routerLink="/compte/admin/dashboard" class="d-flex text-body ms-0">
+                  <i class="feather icon-user me-2 icon-md"></i>
+                  <span>Profil</span>
+                </a>
+              </li>
+              <hr style="margin: 0" />
+              <li class="dropdown-item py-2">
+                <a href="#" (click)="onLogout()" class="d-flex text-body ms-0">
+                  <i class="feather icon-log-out me-2 icon-md"></i>
+                  <span>Déconnexion</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div *ngIf="!currentUser">
+          <a class="btn btn-primary rounded-pill my-2 my-sm-0" routerLink="/connexion">Connexion</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

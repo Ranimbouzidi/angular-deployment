@@ -1,0 +1,170 @@
+<div class="user-subscriptions-container">
+  <div class="container py-5">
+    <!-- En-tête -->
+    <div class="subscriptions-header text-center mb-5">
+      <h1 class="display-4">Mes Abonnements</h1>
+      <p class="lead text-muted">Gérez vos abonnements et suivez leur statut</p>
+    </div>
+
+    <!-- Abonnement actif -->
+    <div class="active-subscription mb-5" *ngIf="activeSubscription && subscriptionStatus">
+      <div class="card" [ngClass]="getStatusClass(subscriptionStatus.status)">
+        <div class="card-header text-white">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-crown me-2"></i>
+            Abonnement {{subscriptionStatus.status}}
+            <span *ngIf="subscriptionStatus.daysRemaining > 0" class="badge bg-light text-dark ms-2">
+              {{subscriptionStatus.daysRemaining}} jours restants
+            </span>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h4 class="pack-name">
+                <i class="bi" [ngClass]="{
+                  'bi-award': activeSubscription.packAbonnement.type === 'SILVER',
+                  'bi-trophy': activeSubscription.packAbonnement.type === 'GOLD',
+                  'bi-gem': activeSubscription.packAbonnement.type === 'PLATINUM'
+                }"></i>
+                {{activeSubscription.packAbonnement.nom}}
+              </h4>
+              <p class="text-muted">{{activeSubscription.packAbonnement.description}}</p>
+              
+              <div class="subscription-details mt-4">
+                <div class="detail-item">
+                  <span class="label">Date de début:</span>
+                  <span class="value">{{activeSubscription.datePaiement | date:'dd/MM/yyyy'}}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Durée:</span>
+                  <span class="value">{{activeSubscription.packAbonnement.duree}} jours</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Prix:</span>
+                  <span class="value">{{activeSubscription.montant}}€</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="progress-section">
+                <h6>Progression de l'abonnement</h6>
+                <div class="progress">
+                  <div class="progress-bar" 
+                       [ngClass]="getStatusClass(subscriptionStatus.status)"
+                       role="progressbar" 
+                       [style.width]="getSubscriptionProgress(activeSubscription) + '%'"
+                       [attr.aria-valuenow]="getSubscriptionProgress(activeSubscription)"
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                    {{getSubscriptionProgress(activeSubscription) | number:'1.0-0'}}%
+                  </div>
+                </div>
+                <div class="progress-info mt-2">
+                  <small class="text-muted">
+                    Jours restants: {{getRemainingDays(activeSubscription)}}
+                  </small>
+                </div>
+              </div>
+
+              <div class="alert alert-warning mt-3" *ngIf="subscriptionStatus.status === 'Expiration proche'">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Votre abonnement expire bientôt ! Pensez à le renouveler.
+              </div>
+
+              <div class="avantages-section mt-4">
+                <h6>Avantages inclus:</h6>
+                <ul class="list-unstyled">
+                  <li *ngFor="let avantage of activeSubscription.packAbonnement.avantages">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    {{avantage}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historique des abonnements -->
+    <div class="subscriptions-history">
+      <h3 class="mb-4">Historique des abonnements</h3>
+      
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Pack</th>
+              <th>Date de début</th>
+              <th>Durée</th>
+              <th>Prix</th>
+              <th>Statut</th>
+              <th>Progression</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subscription of subscriptions">
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="bi me-2" [ngClass]="{
+                    'bi-award': subscription.packAbonnement.type === 'SILVER',
+                    'bi-trophy': subscription.packAbonnement.type === 'GOLD',
+                    'bi-gem': subscription.packAbonnement.type === 'PLATINUM'
+                  }"></i>
+                  {{subscription.packAbonnement.nom}}
+                </div>
+              </td>
+              <td>{{subscription.datePaiement | date:'dd/MM/yyyy'}}</td>
+              <td>{{subscription.packAbonnement.duree}} jours</td>
+              <td>{{subscription.montant}}€</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'bg-success': getSubscriptionStatus(subscription) === 'Actif',
+                  'bg-warning': getSubscriptionStatus(subscription) === 'Inactif',
+                  'bg-danger': getSubscriptionStatus(subscription) === 'Expiré'
+                }">
+                  {{getSubscriptionStatus(subscription)}}
+                </span>
+              </td>
+              <td>
+                <div class="progress" style="height: 5px;">
+                  <div class="progress-bar" 
+                       [ngClass]="{
+                         'bg-success': getSubscriptionStatus(subscription) === 'Actif',
+                         'bg-warning': getSubscriptionStatus(subscription) === 'Inactif',
+                         'bg-danger': getSubscriptionStatus(subscription) === 'Expiré'
+                       }"
+                       role="progressbar" 
+                       [style.width]="getSubscriptionProgress(subscription) + '%'"
+                       [attr.aria-valuenow]="getSubscriptionProgress(subscription)"
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Message de chargement -->
+    <div class="text-center" *ngIf="isLoading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p class="mt-2">Chargement de vos abonnements...</p>
+    </div>
+
+    <!-- Message si aucun abonnement -->
+    <div class="text-center" *ngIf="!isLoading && subscriptions.length === 0">
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Vous n'avez pas encore d'abonnements.
+        <a routerLink="/pricing" class="alert-link ms-2">Découvrez nos offres</a>
+      </div>
+    </div>
+  </div>
+</div> 

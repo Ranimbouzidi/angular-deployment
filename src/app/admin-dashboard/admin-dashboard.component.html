@@ -1,0 +1,75 @@
+<div *ngIf="dashboardData" class="dashboard-container">
+  <div class="dashboard-header">
+    <h2 class="dashboard-title">Tableau de bord IA</h2>
+  </div>
+
+  <div class="stats-cards">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Utilisateurs</h3>
+        <p class="stat-value">{{ dashboardData.stats.totalUsers }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Score de fidélité moyen</h3>
+        <p class="stat-value">{{ dashboardData.stats.averageLoyaltyScore }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="analyses-section">
+    <h3 class="section-title">Analyses par utilisateur</h3>
+    <div class="table-responsive">
+      <table class="table modern-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Score Fidélité</th>
+            <th>Catégorie</th>
+            <th>Recommandations</th>
+            <th>Priorité</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of dashboardData.userAnalyses">
+            <td>{{ user.userName }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <div class="loyalty-score">
+                <span class="score-value">{{ user.loyaltyScore }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="category-badge">{{ user.spendingCategory }}</span>
+            </td>
+            <td>
+              <div class="recommendations-list">
+                <div *ngFor="let rec of user.recommendations" class="recommendation-item">
+                  {{ rec.message }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="priority-list">
+                <div *ngFor="let rec of user.recommendations">
+                  <span class="priority-badge" [ngClass]="'priority-' + rec.priority.toLowerCase()">
+                    {{ rec.priority }}
+                  </span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  

@@ -1,0 +1,32 @@
+<div class="verify-wrapper">
+    <div class="verify-card">
+      <h2>Vérification du compte</h2>
+      <p class="subtitle">Veuillez entrer le code reçu par email pour activer votre compte.</p>
+  
+      <form (ngSubmit)="verifyCode()" #form="ngForm">
+        <input
+          type="email"
+          class="form-control"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Adresse email"
+          required />
+  
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="code"
+          name="code"
+          placeholder="Code de vérification"
+          required />
+  
+        <button class="btn-verify" type="submit" [disabled]="!email || !code">
+          Vérifier
+        </button>
+      </form>
+  
+      <div *ngIf="message" class="alert alert-success mt-3">{{ message }}</div>
+      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+    </div>
+  </div>
+  

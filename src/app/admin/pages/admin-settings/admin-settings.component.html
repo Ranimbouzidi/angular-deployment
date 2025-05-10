@@ -1,0 +1,59 @@
+<nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink=".">Compte</a></li>
+    </ol>
+  </nav>
+  
+  <div class="row">
+    <div class="grid-margin stretch-card">
+       <div class="card">
+          <div class="card-body">
+             <div *ngIf="successMessage" class="alert alert-success text-center alert-dismissible fade show" role="alert">
+                {{ successMessage }}
+                <button type="button" class="btn-close" aria-label="Close" (click)="hideSuccessMessage()"></button>
+             </div>
+
+             <div *ngIf="ErrorMessage" class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+              {{ ErrorMessage }}
+              <button type="button" class="btn-close" aria-label="Close" (click)="hideErrorMessage()"></button>
+           </div>
+             <div class="row">
+                <div class="col-lg-6">
+                   <form class="forms-sample " (submit)="UpdateUser()" [formGroup]="validationForm">
+                      <input hidden type="text" class="form-control" id="nom" formControlName="id" 
+                         [ngClass]="{'is-invalid': isFormSubmitted && form.id.errors}"   placeholder="Nom" required>
+                      <div class="mb-3">
+                         <label for="exampleInputUsername1" class="form-label">Nom</label>
+                         <input type="text" class="form-control" id="nom" formControlName="nom" 
+                            [ngClass]="{'is-invalid': isFormSubmitted && form.nom.errors}"  placeholder="Nom" required>
+                      </div>
+                      <div class="mb-3">
+                         <label for="exampleInputUsername1" class="form-label">Prénom</label>
+                         <input type="text" class="form-control" id="prenom" formControlName="prenom" 
+                            [ngClass]="{'is-invalid': isFormSubmitted && form.prenom.errors}"  placeholder="Prénom" required>
+                      </div>
+                      <div class="mb-3">
+                         <label for="exampleInputUsername1" class="form-label">Email</label>
+                         <input type="email" class="form-control" id="email" formControlName="email" 
+                            [ngClass]="{'is-invalid': isFormSubmitted && form.email.errors}"  placeholder="Email" required>
+                      </div>
+                      <div *ngIf="emailExistsError" class="text-danger mb-3">{{ emailExistsError }}</div>
+                      <div>
+                         <button type="submit" class="btn btn-primary" >Mettre à jour</button>
+                      </div>
+                   </form>
+                </div>
+                <div class="col-lg-6" style="border-left: 1px solid #ccc;">
+                  <form class="forms-sample" (submit)="changePassword()" [formGroup]="passwordForm"> 
+                    <div class="mb-3"> <label for="currentPassword" class="form-label">Mot de passe actuel</label> <input type="password" class="form-control" id="currentPassword" formControlName="currentPassword" placeholder="Mot de passe actuel" required> </div>
+                    <div class="mb-3"> <label for="newPassword" class="form-label">Nouveau mot de passe</label> <input type="password" class="form-control" id="newPassword" pattern="^.{6,20}$"  formControlName="newPassword" placeholder="entre 6 et 20 Caractères" required> </div>
+                    <div class="mb-3"> <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label> <input type="password" class="form-control" id="confirmPassword" pattern="^.{6,20}$"  formControlName="confirmPassword" placeholder="entre 6 et 20 Caractères" required> </div>
+                    <div> <button type="submit" class="btn btn-primary" >Changer le mot de passe</button> </div>
+                    </form>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+

@@ -1,0 +1,104 @@
+<div class="chat-wrapper">
+  <div class="chat-header">
+    <h4 class="chat-title">Chat with {{ receiverName }}</h4>
+    <div class="header-actions">
+      <div class="connection-status" [ngClass]="{
+        'status-connecting': connectionStatus === 'connecting',
+        'status-connected': connectionStatus === 'connected',
+        'status-disconnected': connectionStatus === 'disconnected'
+      }">
+        {{ connectionStatus | titlecase }}
+      </div>
+      <button class="terminate-chat-btn" (click)="terminateChat()" title="End Chat">
+        <i class="mdi mdi-close"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="search-wrapper">
+    <div class="search-input">
+      <i class="mdi mdi-magnify search-icon"></i>
+      <input type="text" 
+             [(ngModel)]="searchQuery"
+             (ngModelChange)="searchMessages()"
+             placeholder="Search in conversation..."
+             [ngClass]="{'is-searching': isSearching}">
+      <button class="clear-search" 
+              (click)="clearSearch()"
+              *ngIf="isSearching">
+        <i class="mdi mdi-close"></i>
+      </button>
+    </div>
+    <div class="search-info" *ngIf="isSearching">
+      Found {{ filteredMessages.length }} message{{ filteredMessages.length !== 1 ? 's' : '' }}
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages-container">
+    <div class="messages-list" #messageContainer>
+      <div *ngFor="let message of displayMessages" 
+           [ngClass]="{'message-sent': message.senderId === currentUser.id.toString(), 
+                     'message-received': message.senderId !== currentUser.id.toString()}">
+        <div class="message-header">
+          <span class="sender-name">{{ message.senderName }}</span>
+          <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
+        </div>
+        <div class="message-content">
+          <div *ngIf="!message.isEditing">
+            {{ message.content }}
+            <small class="edit-indicator" *ngIf="message.edited">(edited)</small>
+            <button *ngIf="message.senderId === currentUser.id.toString()" 
+                    class="edit-btn"
+                    (click)="startEditing(message)">
+              <i class="mdi mdi-pencil"></i>
+            </button>
+          </div>
+          <div *ngIf="message.isEditing" class="edit-container">
+            <input type="text" 
+                   [(ngModel)]="editedContent"
+                   (keyup.enter)="saveEdit(message)"
+                   (keyup.escape)="cancelEditing(message)">
+            <div class="edit-actions">
+              <button class="save-btn" (click)="saveEdit(message)">
+                <i class="mdi mdi-check"></i>
+              </button>
+              <button class="cancel-btn" (click)="cancelEditing(message)">
+                <i class="mdi mdi-close"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="message-reactions" *ngIf="message.reactions && Object.keys(message.reactions).length > 0">
+          <span class="reaction" *ngFor="let userId of Object.keys(message.reactions)">
+            {{ message.reactions[userId] }}
+          </span>
+        </div>
+        <div class="reaction-options">
+          <button class="reaction-btn" 
+                  *ngFor="let reaction of availableReactions"
+                  (click)="addReaction(message, reaction)">
+            {{ reaction }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message input -->
+  <div class="message-input-container">
+    <div class="input-wrapper">
+      <input type="text" 
+             [(ngModel)]="newMessage" 
+             placeholder="Type your message..."
+             [disabled]="connectionStatus !== 'connected'"
+             (keyup.enter)="sendMessage()">
+      <button class="send-btn" 
+              (click)="sendMessage()"
+              [disabled]="!newMessage.trim() || connectionStatus !== 'connected'">
+        <i class="mdi mdi-send"></i>
+      </button>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,65 @@
+
+
+<div class="card mb-3 bg-primary">
+    <div class="card-body mt-3"></div>
+</div>
+<div class="container ">
+
+    <div class="row"><div class="col-lg-3" >
+
+        <div class="card border-2 border-dark" >
+    
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center border-bottom px-10 py-3" #avatar>
+                    <div class="mb-3">
+                      <img class="wd-80 ht-80 rounded-circle" [src]="'http://localhost:8081/api/uploads/' + currentUser.photo" alt="">
+                    </div>
+                    <div class="text-center">
+                        <h3 class=" nav-link fw-bolder" style="font-size: 20px;">{{currentUser.nom}} {{currentUser.prenom}}</h3>
+                        <p class="tx-12 text-muted mt-1">{{currentUser.role}}</p>
+                      <button class="rounded-pill btn btn-outline-primary btn-sm m-2" routerLink="/profil/{{currentUser.id}}" >Voir profil</button>
+                     
+                    </div>
+                  </div>
+
+
+                  <div class="text-primary fw-bolder side-bar"><a routerLink="/mon-compte" >Profil</a> </div>
+                  <hr>
+                  <div  class="text-primary fw-bolder side-bar"><a routerLink="" >Abonnements</a>
+
+                 </div>
+               
+                  <hr>
+                  <div class="text-dark fw-bolder side-bar"><a class="text-dark" (click)="onLogout()" >Déconnexion</a> </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col-lg-9">
+    <div class="card border-2 border-dark">
+    <div class="card-body ">
+        <router-outlet></router-outlet>
+    </div>
+    
+    
+    </div>
+    
+    
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
