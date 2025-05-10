@@ -1,4 +1,3 @@
-# Étape 1 : Build l'application Angular
 FROM node:16 AS build
 
 # Définir le répertoire de travail dans le conteneur
@@ -7,23 +6,23 @@ WORKDIR /app
 # Copier les fichiers package.json et package-lock.json
 COPY package*.json ./
 
-# Installer les dépendances Node.js (cela va créer un dossier node_modules)
-RUN npm install --force
+# Installer les dépendances avec l'option --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
-# Copier tout le reste du code source (ton projet Angular)
+# Copier tout le reste du code source
 COPY . .
 
-# Construire l'application Angular pour la production (cela génère dist/nobleui-angular)
+# Construire l'application pour la production
 RUN npm run build --prod
 
-# Étape 2 : Créer l'image finale avec l'application prête à être servie via nginx
+# Étape 2 : Créer l'image finale avec l'application Angular prête à être servie
 FROM nginx:alpine
 
-# Copier les fichiers construits depuis l'étape 1 vers le dossier public de nginx
-COPY --from=build /app/dist/nobleui-angular /usr/share/nginx/html
+# Copier les fichiers construits dans le répertoire public de nginx
+COPY --from=build /app/dist/* /usr/share/nginx/html
 
-# Exposer le port 80 (par défaut pour nginx)
+# Exposer le port 80 (port par défaut pour nginx)
 EXPOSE 80
 
-# Lancer nginx en mode premier plan
+# Démarrer nginx
 CMD ["nginx", "-g", "daemon off;"]

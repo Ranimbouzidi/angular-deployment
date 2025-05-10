@@ -18,11 +18,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Mets la version que tu utilises localement si différente
+          node-version: '16'  # Mets la version que tu utilises localement si différente
 
       # Étape 3 : Installer les dépendances npm
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps  # Assurer l'installation sans conflit de dépendances
 
       # Étape 4 : Build Angular en mode production
       - name: Build Angular app
