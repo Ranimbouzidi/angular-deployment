@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installer les dépendances Node.js (cela va créer un dossier node_modules)
-RUN npm install --legacy-peer-deps
+RUN npm install --force
 
 # Copier tout le reste du code source (ton projet Angular)
 COPY . .
